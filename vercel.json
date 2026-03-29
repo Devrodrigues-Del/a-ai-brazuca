@@ -1,0 +1,6 @@
+{
+  "rewrites": [
+    { "source": "/", "destination": "/sistema-atendimento.html" },
+    { "source": "/cardapio", "destination": "/sistema-atendimento.html" }
+  ]
+}
