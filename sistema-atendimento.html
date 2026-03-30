@@ -1314,14 +1314,73 @@ function maskPhone(el){let v=el.value.replace(/\D/g,'').slice(0,11);if(v.length>
 function toast(msg,t='in'){const ic={ok:'✅',er:'❌',in:'ℹ️',wa:'⚠️'};const el=document.createElement('div');el.className=`toast ${t}`;el.innerHTML=`<span>${ic[t]||'•'}</span><span>${msg}</span>`;document.getElementById('toasts').appendChild(el);setTimeout(()=>el.remove(),3300);}
 
 // ══ MODALS ══
-function openM(id,data={}){
-  window._md=data;const el=document.getElementById(id);if(!el)return;
-  if(id==='m-ct'&&data.t){document.getElementById('m-ct-t').textContent=data.t==='pagar'?'🔴 Nova Conta a Pagar':'🟢 Nova Conta a Receber';document.getElementById('ct-tp').value=data.t;document.getElementById('ct-vc').value=new Date().toISOString().slice(0,10);}
-  if(id==='m-nfe'&&data.tp){document.getElementById('m-nfe-t').textContent=`Emitir ${data.tp}`;document.getElementById('nfe-tp').value=data.tp;S.nfeIC=0;document.getElementById('nfe-il').innerHTML='';addNfeI();}
-  if(id==='m-ag'){document.getElementById('ag-dt').value=new Date().toISOString().slice(0,10);const sv=document.getElementById('ag-sv');sv.innerHTML=SERVS.map(s=>`<option>${s}</option>`).join('');const dl=document.getElementById('ag-cli-dl');dl.innerHTML=S.clientes.map(c=>`<option value="${esc(c.nome)}">`).join('');}
-  if(id==='m-venda'){S.vendaIC=0;document.getElementById('vd-il').innerHTML='';addVI();const dl=document.getElementById('vd-cli-dl');if(dl)dl.innerHTML=S.clientes.map(c=>`<option value="${esc(c.nome)}">`).join('');}
-  if(id==='m-cli'&&!data.editId){document.getElementById('m-cli-t').textContent='Novo Cliente';['cli-n','cli-t','cli-e','cli-ed','cli-ob'].forEach(f=>document.getElementById(f).value='');document.getElementById('cli-na').value='';document.getElementById('cli-c').value='regular';document.getElementById('cli-id').value='';}
-  el.style.display='flex';el.onclick=e=>{if(e.target===el)closeM(id);};
+function openM(id, data={}) {
+  const el = document.getElementById(id);
+  if (!el) { console.warn('Modal not found:', id); return; }
+  window._md = data;
+
+  if (id === 'm-ct' && data.t) {
+    document.getElementById('m-ct-t').textContent = data.t === 'pagar' ? '🔴 Nova Conta a Pagar' : '🟢 Nova Conta a Receber';
+    document.getElementById('ct-tp').value = data.t;
+    document.getElementById('ct-vc').value = new Date().toISOString().slice(0,10);
+  }
+  if (id === 'm-nfe' && data.tp) {
+    document.getElementById('m-nfe-t').textContent = 'Emitir ' + data.tp;
+    document.getElementById('nfe-tp').value = data.tp;
+    document.getElementById('nfe-il').innerHTML = '';
+    addNfeI();
+  }
+  if (id === 'm-ag') {
+    document.getElementById('ag-dt').value = new Date().toISOString().slice(0,10);
+    const sv = document.getElementById('ag-sv');
+    if (sv) sv.innerHTML = SERVS.map(s => '<option>' + s + '</option>').join('');
+    const dl = document.getElementById('ag-cli-dl');
+    if (dl) dl.innerHTML = S.clientes.map(c => '<option value="' + esc(c.nome) + '">').join('');
+  }
+  if (id === 'm-venda') {
+    S.vendaIC = 0;
+    document.getElementById('vd-il').innerHTML = '';
+    addVI();
+    const dl = document.getElementById('vd-cli-dl');
+    if (dl) dl.innerHTML = S.clientes.map(c => '<option value="' + esc(c.nome) + '">').join('');
+  }
+  if (id === 'm-cli' && !data.editId) {
+    document.getElementById('m-cli-t').textContent = 'Novo Cliente';
+    ['cli-n','cli-t','cli-e','cli-ed','cli-ob'].forEach(f => { const el = document.getElementById(f); if(el) el.value = ''; });
+    const na = document.getElementById('cli-na'); if(na) na.value = '';
+    const cc = document.getElementById('cli-c'); if(cc) cc.value = 'regular';
+    const ci = document.getElementById('cli-id'); if(ci) ci.value = '';
+  }
+  if (id === 'm-item') {
+    // Populate category dropdown
+    const catSel = document.getElementById('mi-c');
+    if (catSel) {
+      S.cardCategories = DB.g('bz_ccat') || S.cardCategories || [];
+      catSel.innerHTML = S.cardCategories.length
+        ? S.cardCategories.map(c => '<option value="' + c.id + '">' + (c.icone||'') + ' ' + esc(c.nome) + '</option>').join('')
+        : '<option value="">— Crie uma categoria primeiro —</option>';
+    }
+    if (!data.editId) {
+      // Reset for new item
+      document.getElementById('m-item-t').textContent = '+ Novo Item';
+      ['mi-n','mi-d','mi-pp'].forEach(f => { const el = document.getElementById(f); if(el) el.value = ''; });
+      const mp = document.getElementById('mi-p'); if(mp) mp.value = '';
+      const mav = document.getElementById('mi-av'); if(mav) mav.value = '1';
+      const mid = document.getElementById('mi-id'); if(mid) mid.value = '';
+      const mig = document.getElementById('mi-imgdata'); if(mig) mig.value = '';
+      const mpv = document.getElementById('mi-img-prev'); if(mpv) mpv.style.display = 'none';
+      const me = document.getElementById('mi-e'); if(me) me.value = '🍇';
+    }
+  }
+  if (id === 'm-cat' && !data.editId) {
+    document.getElementById('mcat-n').value = '';
+    document.getElementById('mcat-i').value = '';
+    document.getElementById('mcat-o').value = (S.cardCategories.length + 1).toString();
+    document.getElementById('mcat-id').value = '';
+  }
+
+  el.style.display = 'flex';
+  el.onclick = e => { if (e.target === el) closeM(id); };
 }
 function closeM(id){const el=document.getElementById(id);if(el)el.style.display='none';}
 document.addEventListener('keydown',e=>{if(e.key==='Escape'){document.querySelectorAll('.mb').forEach(m=>m.style.display='none');closePrint();}});
@@ -1637,10 +1696,10 @@ function initCardapio() {
 }
 
 function saveCardapio() {
-  DB.s('bz_ccat', S.cardCategories);
-  DB.s('bz_citm', S.cardItems);
-  DB.s('bz_ped',  S.pedidos);
-  DB.s('bz_loja', S.lojaAberta);
+  DB.s('bz_ccat', S.cardCategories || []);
+  DB.s('bz_citm', S.cardItems || []);
+  DB.s('bz_ped',  S.pedidos || []);
+  DB.s('bz_loja', S.lojaAberta !== undefined ? S.lojaAberta : true);
 }
 
 function loadCardapio() {
@@ -1652,8 +1711,16 @@ function loadCardapio() {
 
 // ── CARDÁPIO ADMIN ──────────────────────────────────────────────
 function rCard() {
-  initCardapio();
-  document.getElementById('loja-toggle').checked = S.lojaAberta;
+  // Always reload from storage to get latest data
+  S.cardCategories = DB.g('bz_ccat') || S.cardCategories || [];
+  S.cardItems      = DB.g('bz_citm') || S.cardItems || [];
+  S.pedidos        = DB.g('bz_ped')  || S.pedidos   || [];
+  S.lojaAberta     = DB.g('bz_loja') !== null ? DB.g('bz_loja') : true;
+  // If still empty, run seed
+  if(!S.cardCategories.length) seedCardapio();
+  const tog = document.getElementById('loja-toggle');
+  if(tog) tog.checked = S.lojaAberta;
+  document.getElementById('loja-status-txt').textContent = S.lojaAberta ? '🟢 Aberta' : '🔴 Fechada';
   document.getElementById('loja-status-txt').textContent = S.lojaAberta ? 'Aberta' : 'Fechada';
   // Show the link in the banner
   const lb = document.getElementById('card-link-box');
@@ -1825,7 +1892,7 @@ function deleteItem(id) {
 
 // ── PEDIDOS ADMIN ────────────────────────────────────────────────
 function renderPedidos() {
-  initCardapio();
+  S.pedidos = DB.g('bz_ped') || S.pedidos || [];
   const cols = [
     { id:'novo',       label:'🔔 Novos',        color:'#D97706', bg:'var(--yl)' },
     { id:'preparando', label:'👨‍🍳 Preparando',    color:'var(--bd)', bg:'var(--bl)' },
@@ -2090,6 +2157,8 @@ function confirmarPedido() {
   const steps = [{ic:'✅',lbl:'Confirmado'},{ic:'👨‍🍳',lbl:'Preparando'},{ic:'🛵',lbl:'A caminho'},{ic:'🍇',lbl:'Entregue'}];
   document.getElementById('os-track').innerHTML = steps.map((s,i)=>`<div class="os-step ${i===0?'done':''}"><div class="os-step-dot">${s.ic}</div><div class="os-step-label">${s.lbl}</div></div>`).join('');
   document.getElementById('order-success').classList.add('show');
+  // Notification sound for admin
+  try{const ac=new(window.AudioContext||window.webkitAudioContext)();const o=ac.createOscillator();const g=ac.createGain();o.connect(g);g.connect(ac.destination);o.frequency.setValueAtTime(880,ac.currentTime);o.frequency.setValueAtTime(660,ac.currentTime+.1);g.gain.setValueAtTime(.2,ac.currentTime);g.gain.exponentialRampToValueAtTime(.001,ac.currentTime+.4);o.start();o.stop(ac.currentTime+.4);}catch(e){}
   // notify admin
   const badge = document.getElementById('ped-badge');
   const novos = S.pedidos.filter(p=>p.status==='novo').length;
