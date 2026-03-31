@@ -989,10 +989,8 @@ button,input,select,textarea{font-family:var(--font)}
         </div>
       </div>
     </div>
-  </div>
-</div>
-<!-- ═══ VIEW CARDÁPIO ADMIN ═══ -->
-<div class="view" id="v-card">
+    <!-- ═══ VIEW CARDÁPIO ADMIN ═══ -->
+    <div class="view" id="v-card">
   <div class="ph">
     <div class="ph-left"><h2>🍽️ Cardápio Online</h2><p>Gerencie os itens do seu cardápio de delivery</p></div>
     <div class="ph-actions">
@@ -1006,20 +1004,30 @@ button,input,select,textarea{font-family:var(--font)}
       <button class="btn btn-purple btn-sm" onclick="openDelivery()">👁 Ver como cliente</button>
     </div>
   </div>
-  <div style="background:linear-gradient(135deg,#1E0840,#2D1060);border:1.5px solid rgba(143,224,42,.25);border-radius:16px;padding:18px 22px;margin-bottom:20px;display:flex;align-items:center;gap:16px;flex-wrap:wrap;box-shadow:0 4px 20px rgba(30,8,64,.2)">
-    <div style="font-size:32px">🍇</div>
-    <div style="flex:1;min-width:200px">
-      <div style="font-weight:900;color:#fff;font-size:15px;margin-bottom:4px">Cardápio disponível para clientes!</div>
-      <div style="font-size:12px;color:rgba(255,255,255,.55);margin-bottom:8px">Compartilhe o link abaixo com seus clientes ou pelo WhatsApp</div>
-      <div id="card-link-box" style="background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.15);border-radius:9px;padding:8px 12px;font-size:12px;color:rgba(255,255,255,.7);font-family:monospace;word-break:break-all;cursor:pointer" onclick="cpCardLink()">
+  <div style="background:linear-gradient(135deg,#1E0840,#2D1060);border:1.5px solid rgba(143,224,42,.25);border-radius:16px;padding:18px 22px;margin-bottom:16px;display:flex;align-items:stretch;gap:16px;flex-wrap:wrap;box-shadow:0 4px 20px rgba(30,8,64,.2)">
+    <div id="qr-box" style="width:90px;height:90px;background:white;border-radius:10px;display:flex;align-items:center;justify-content:center;flex-shrink:0;overflow:hidden">
+      <img id="qr-img" src="" alt="QR" style="width:86px;height:86px">
+    </div>
+    <div style="flex:1;min-width:180px;display:flex;flex-direction:column;justify-content:center">
+      <div style="font-weight:900;color:#fff;font-size:14px;margin-bottom:4px">📲 Link do cardápio para clientes</div>
+      <div style="font-size:11px;color:rgba(255,255,255,.55);margin-bottom:8px">Compartilhe ou mostre o QR Code — clientes fazem pedidos e você recebe aqui no app</div>
+      <div id="card-link-box" style="background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.15);border-radius:9px;padding:7px 10px;font-size:11px;color:rgba(255,255,255,.7);font-family:monospace;word-break:break-all;cursor:pointer;max-width:100%" onclick="cpCardLink()">
         Clique para copiar o link do cardápio
       </div>
     </div>
-    <div style="display:flex;flex-direction:column;gap:8px;flex-shrink:0">
+    <div style="display:flex;flex-direction:column;gap:6px;flex-shrink:0;justify-content:center">
       <button class="btn btn-lime btn-sm" onclick="cpCardLink()">📋 Copiar link</button>
-      <button class="btn btn-sm" style="background:#25D366;color:#fff;border:none" onclick="shareCardWA()">💬 Compartilhar</button>
+      <button class="btn btn-sm" style="background:#25D366;color:#fff;border:none" onclick="shareCardWA()">💬 WhatsApp</button>
       <button class="btn btn-sm" style="background:rgba(255,255,255,.1);color:#fff;border:1px solid rgba(255,255,255,.2)" onclick="openDelivery()">👁 Ver cardápio</button>
+      <button class="btn btn-sm" style="background:rgba(143,224,42,.15);color:var(--lime);border:1px solid rgba(143,224,42,.3)" onclick="openDlv()">⚙️ Config delivery</button>
     </div>
+  </div>
+  <div id="dlv-info-bar" style="background:var(--white);border:1.5px solid var(--brd);border-radius:12px;padding:10px 16px;margin-bottom:16px;display:flex;gap:16px;flex-wrap:wrap;align-items:center">
+    <div style="font-size:11px;font-weight:800;color:var(--t3);text-transform:uppercase;letter-spacing:.5px">Config. delivery:</div>
+    <div style="font-size:12px;color:var(--t2)">🛵 <span id="dlv-bar-tempo">—</span></div>
+    <div style="font-size:12px;color:var(--t2)">💰 <span id="dlv-bar-taxa">—</span></div>
+    <div style="font-size:12px;color:var(--t2)">📱 <span id="dlv-bar-tel">—</span></div>
+    <button onclick="openDlv()" style="margin-left:auto;font-size:11px;color:var(--purple);background:none;border:none;cursor:pointer;font-weight:700">✏️ Editar</button>
   </div>
   <div class="kg" id="card-kpis" style="margin-bottom:20px"></div>
   <!-- HOW TO EDIT GUIDE -->
@@ -1037,21 +1045,41 @@ button,input,select,textarea{font-family:var(--font)}
   </div>
   <div class="cat-tabs" id="card-cat-tabs"></div>
   <div class="menu-grid" id="card-items-grid"></div>
-</div>
-
-<!-- ═══ VIEW PEDIDOS ═══ -->
-<div class="view" id="v-ped">
-  <div class="ph">
-    <div class="ph-left"><h2>🛍️ Pedidos do Delivery</h2><p>Gerencie todos os pedidos em tempo real</p></div>
-    <div class="ph-actions">
-      <button class="btn btn-s btn-sm" onclick="renderPedidos()">🔄 Atualizar</button>
     </div>
+
+    <!-- ═══ VIEW PEDIDOS ═══ -->
+    <div class="view" id="v-ped">
+      <div class="ph">
+        <div class="ph-left"><h2>🛍️ Pedidos do Delivery</h2><p>Gerencie todos os pedidos em tempo real</p></div>
+        <div class="ph-actions">
+          <button class="btn btn-s btn-sm" onclick="renderPedidos()">🔄 Atualizar</button>
+        </div>
+      </div>
+      <div class="order-kanban" id="ped-kanban"></div>
+    </div>
+
   </div>
-  <div class="order-kanban" id="ped-kanban"></div>
 </div>
 
 
 <!-- MODAIS -->
+<!-- Delivery Config -->
+<div id="m-dlv" class="mb" style="display:none"><div class="modal modal-lg"><div class="mh"><span class="mt">⚙️ Configurar Delivery</span><button class="mx" onclick="closeM('m-dlv')">✕</button></div>
+  <div style="background:var(--lime-l);border-radius:10px;padding:11px 14px;margin-bottom:16px;font-size:12px;color:var(--berry);font-weight:600">💡 <b>Importante:</b> Informe o número do WhatsApp para receber notificações dos pedidos automaticamente!</div>
+  <div class="fg-row">
+    <div class="fg"><label>📱 WhatsApp para receber pedidos *</label><input type="tel" id="dlv-tel" placeholder="(11) 99999-9999" oninput="maskPhone(this)"></div>
+    <div class="fg"><label>🔑 Chave Pix (para pagamentos)</label><input type="text" id="dlv-pix" placeholder="email, CPF ou telefone"></div>
+  </div>
+  <div class="fg-row">
+    <div class="fg"><label>🕐 Tempo estimado (minutos)</label><input type="text" id="dlv-tempo" placeholder="Ex: 30-45 min" value="20-35 min"></div>
+    <div class="fg"><label>💰 Taxa de entrega (R$)</label><input type="number" id="dlv-taxa" step="0.01" placeholder="0,00" value="0"></div>
+  </div>
+  <div class="fg"><label><input type="checkbox" id="dlv-gratis" style="width:auto;margin-right:6px"> Entrega grátis (exibir "Grátis" para o cliente)</label></div>
+  <div class="fg"><label>🏘️ Bairros/regiões atendidas</label><input type="text" id="dlv-bairros" placeholder="Ex: Centro, Vila Nova, Jardim..."></div>
+  <div class="fg"><label>📝 Mensagem de boas-vindas no cardápio</label><textarea id="dlv-obs" rows="2" placeholder="Ex: Pedido mínimo R$ 15. Pagamos no Pix ou dinheiro!"></textarea></div>
+  <div style="display:flex;gap:10px;margin-top:8px"><button class="btn btn-ghost" onclick="closeM('m-dlv')">Cancelar</button><button class="btn btn-lime" style="flex:1" onclick="saveDlv()">💾 Salvar configurações</button></div>
+</div></div>
+
 <!-- Agendamento -->
 <div id="m-ag" class="mb" style="display:none"><div class="modal"><div class="mh"><span class="mt">📅 Novo Agendamento</span><button class="mx" onclick="closeM('m-ag')">✕</button></div>
   <div class="fg"><label>Cliente *</label><input type="text" id="ag-cli" placeholder="Nome do cliente" list="ag-cli-dl"><datalist id="ag-cli-dl"></datalist></div>
@@ -1218,6 +1246,8 @@ button,input,select,textarea{font-family:var(--font)}
         <div class="fg"><label>Complemento</label><input type="text" id="co-comp" placeholder="Apto 4"></div>
       </div>
       <div class="fg"><label>Referência</label><input type="text" id="co-ref" placeholder="Próximo ao mercado..."></div>
+      <div class="cs-section-title">📝 Observações</div>
+      <div class="fg"><label>Obs. do pedido (opcional)</label><textarea id="co-obs" rows="2" placeholder="Ex: Sem granola, capricha no açaí... 🍇"></textarea></div>
       <div class="cs-section-title">💳 Forma de pagamento</div>
       <div class="payment-opts" id="pay-opts">
         <div class="pay-opt sel" onclick="selPay(this,'Pix')"><div class="pay-opt-icon">🟢</div><div class="pay-opt-name">Pix</div></div>
@@ -1248,7 +1278,7 @@ button,input,select,textarea{font-family:var(--font)}
 
 <!-- MODAL CATEGORIA -->
 <div id="m-cat" class="mb" style="display:none"><div class="modal">
-  <div class="mh"><span class="mt">📂 Nova Categoria</span><button class="mx" onclick="closeM('m-cat')">✕</button></div>
+  <div class="mh"><span class="mt" id="m-cat-t">📂 Nova Categoria</span><button class="mx" onclick="closeM('m-cat')">✕</button></div>
   <div class="fg"><label>Nome da categoria *</label><input type="text" id="mcat-n" placeholder="Ex.: Açaís, Complementos..."></div>
   <div class="fg-row">
     <div class="fg"><label>Ícone (emoji)</label><input type="text" id="mcat-i" placeholder="🍇" maxlength="4" style="font-size:22px"></div>
@@ -1388,6 +1418,7 @@ document.addEventListener('keydown',e=>{if(e.key==='Escape'){document.querySelec
 // ══ LOGIN ══
 window.addEventListener('DOMContentLoaded',()=>{
   applyCfg();seedData();seedCardapio();
+  S.delivery = DB.g('bz_dlv') || { tel:'', taxa:0, taxaGratis:true, tempo:'20-35 min', obs:'', bairros:'', pix:'' };
   // If URL has ?cardapio=1 or ?menu=1, show delivery app directly
   const params = new URLSearchParams(window.location.search);
   if(params.get('cardapio')==='1'||params.get('menu')==='1'){
@@ -1429,6 +1460,9 @@ function goTo(v,btn){
   document.getElementById('tb-icon').textContent=pg[1];
   const fn={dash:rDash,agenda:rAgenda,fin:rFin,crm:rCRM,nfe:rNFe,est:rEst,mkt:rMkt,app2:rApp,rel:rRel,int:rInt,card:rCard,ped:renderPedidos};
   if(fn[v])fn[v]();
+  // Auto-refresh for pedidos view
+  if(window._pedRefresh) clearInterval(window._pedRefresh);
+  if(v === 'ped') window._pedRefresh = setInterval(renderPedidos, 15000);
 }
 
 // ══ KPI HELPER ══
@@ -1702,6 +1736,10 @@ function saveCardapio() {
   DB.s('bz_loja', S.lojaAberta !== undefined ? S.lojaAberta : true);
 }
 
+function saveDelivery() {
+  DB.s('bz_dlv', S.delivery || {});
+}
+
 function loadCardapio() {
   S.cardCategories = DB.g('bz_ccat') || S.cardCategories || [];
   S.cardItems      = DB.g('bz_citm') || S.cardItems || [];
@@ -1711,40 +1749,58 @@ function loadCardapio() {
 
 // ── CARDÁPIO ADMIN ──────────────────────────────────────────────
 function rCard() {
-  // Always reload from storage to get latest data
-  S.cardCategories = DB.g('bz_ccat') || S.cardCategories || [];
-  S.cardItems      = DB.g('bz_citm') || S.cardItems || [];
-  S.pedidos        = DB.g('bz_ped')  || S.pedidos   || [];
-  S.lojaAberta     = DB.g('bz_loja') !== null ? DB.g('bz_loja') : true;
-  // If still empty, run seed
-  if(!S.cardCategories.length) seedCardapio();
-  const tog = document.getElementById('loja-toggle');
-  if(tog) tog.checked = S.lojaAberta;
-  document.getElementById('loja-status-txt').textContent = S.lojaAberta ? '🟢 Aberta' : '🔴 Fechada';
-  document.getElementById('loja-status-txt').textContent = S.lojaAberta ? 'Aberta' : 'Fechada';
-  // Show the link in the banner
-  const lb = document.getElementById('card-link-box');
-  if(lb){ const base=location.href.split('?')[0]; lb.textContent = base+'?cardapio=1'; }
+  try {
+    // Garantir S.delivery sempre disponível
+    if (!S.delivery) S.delivery = DB.g('bz_dlv') || { tel:'', taxa:0, taxaGratis:true, tempo:'20-35 min', obs:'', bairros:'', pix:'' };
+    // Recarregar dados do storage
+    S.cardCategories = DB.g('bz_ccat') || S.cardCategories || [];
+    S.cardItems      = DB.g('bz_citm') || S.cardItems || [];
+    S.pedidos        = DB.g('bz_ped')  || S.pedidos   || [];
+    S.lojaAberta     = DB.g('bz_loja') !== null ? DB.g('bz_loja') : true;
+    if(!S.cardCategories.length) seedCardapio();
 
-  // KPIs
-  const ativos = S.cardItems.filter(i => i.disponivel !== '0' && i.disponivel !== false);
-  const cats = S.cardCategories.length;
-  const pedHoje = S.pedidos.filter(p => p.criadoEm?.startsWith(new Date().toISOString().slice(0,10))).length;
-  const recHoje = S.pedidos.filter(p => p.criadoEm?.startsWith(new Date().toISOString().slice(0,10))).reduce((s,p) => s + (p.total||0), 0);
-  document.getElementById('card-kpis').innerHTML =
-    kp('🍽️','Itens no cardápio', ativos.length, 'disponíveis', 'var(--lime-l)', 'var(--lime-d)') +
-    kp('📂','Categorias', cats, 'criadas', 'var(--purple-l)', 'var(--purple)') +
-    kp('🛍️','Pedidos hoje', pedHoje, 'no delivery', 'var(--bl)', 'var(--bd)') +
-    kp('💰','Receita hoje', fmt(recHoje), 'no delivery', 'var(--gl)', 'var(--gd)');
+    const tog = document.getElementById('loja-toggle');
+    if(tog) tog.checked = S.lojaAberta;
+    const stEl = document.getElementById('loja-status-txt');
+    if(stEl) stEl.textContent = S.lojaAberta ? 'Aberta' : 'Fechada';
 
-  // Category tabs
-  const tabs = document.getElementById('card-cat-tabs');
-  tabs.innerHTML = `<button class="cat-tab act" onclick="filterCardCat('all',this)">🍽️ Todos</button>` +
-    S.cardCategories.sort((a,b) => (a.ordem||99) - (b.ordem||99)).map(c =>
-      `<button class="cat-tab" onclick="filterCardCat('${c.id}',this)">${c.icone||'📂'} ${esc(c.nome)}</button>`
-    ).join('');
+    // Link e QR do cardápio
+    const cardLinkBase = location.href.split('?')[0];
+    const cardLink = cardLinkBase + '?cardapio=1';
+    const lb = document.getElementById('card-link-box');
+    if(lb) lb.textContent = cardLink;
 
-  renderCardItems('all');
+    // KPIs
+    const ativos = (S.cardItems||[]).filter(i => i.disponivel !== '0' && i.disponivel !== false);
+    const cats = (S.cardCategories||[]).length;
+    const todayStr = new Date().toISOString().slice(0,10);
+    const pedHoje = (S.pedidos||[]).filter(p => p.criadoEm?.startsWith(todayStr)).length;
+    const recHoje = (S.pedidos||[]).filter(p => p.criadoEm?.startsWith(todayStr)).reduce((s,p) => s + (p.total||0), 0);
+    const kpisEl = document.getElementById('card-kpis');
+    if(kpisEl) kpisEl.innerHTML =
+      kp('🍽️','Itens no cardápio', ativos.length, 'disponíveis', 'var(--lime-l)', 'var(--lime-d)') +
+      kp('📂','Categorias', cats, 'criadas', 'var(--purple-l)', 'var(--purple)') +
+      kp('🛍️','Pedidos hoje', pedHoje, 'no delivery', 'var(--bl)', 'var(--bd)') +
+      kp('💰','Receita hoje', fmt(recHoje), 'no delivery', 'var(--gl)', 'var(--gd)');
+
+    // Abas de categorias
+    const tabs = document.getElementById('card-cat-tabs');
+    if(tabs) tabs.innerHTML = `<button class="cat-tab act" onclick="filterCardCat('all',this)">🍽️ Todos</button>` +
+      (S.cardCategories||[]).slice().sort((a,b) => (a.ordem||99) - (b.ordem||99)).map(c =>
+        `<button class="cat-tab" onclick="filterCardCat('${c.id}',this)">${c.icone||'📂'} ${esc(c.nome)} <span onclick="event.stopPropagation();editCat('${c.id}')" style="font-size:10px;opacity:.7;margin-left:3px">✏️</span></button>`
+      ).join('');
+
+    renderCardItems('all');
+    updateDlvBar();
+
+    // QR code
+    const qrImg = document.getElementById('qr-img');
+    if(qrImg) qrImg.src = 'https://api.qrserver.com/v1/create-qr-code/?size=86x86&color=1E0840&bgcolor=ffffff&data=' + encodeURIComponent(cardLink);
+  } catch(e) {
+    console.error('rCard error:', e);
+    const g = document.getElementById('card-items-grid');
+    if(g) g.innerHTML = '<div style="grid-column:1/-1;padding:20px;color:red;font-weight:700">⚠️ Erro ao carregar cardápio: ' + e.message + '</div>';
+  }
 }
 
 function filterCardCat(catId, btn) {
@@ -1754,8 +1810,9 @@ function filterCardCat(catId, btn) {
 }
 
 function renderCardItems(catId) {
-  const list = catId === 'all' ? S.cardItems : S.cardItems.filter(i => i.catId === catId);
+  const list = catId === 'all' ? (S.cardItems||[]) : (S.cardItems||[]).filter(i => i.catId === catId);
   const grid = document.getElementById('card-items-grid');
+  if (!grid) return;
   if (!list.length) {
     grid.innerHTML = `<div style="grid-column:1/-1;text-align:center;padding:60px 24px;color:var(--t3)">
   <div style="font-size:56px;margin-bottom:14px">🍽️</div>
@@ -1782,9 +1839,10 @@ function renderCardItems(catId) {
         </div>
         <div class="menu-card-footer">
           <span class="tag tgr" style="font-size:10px">${cat ? (cat.icone||'📂')+' '+esc(cat.nome) : '—'}</span>
-          <div style="display:flex;gap:5px">
+          <div style="display:flex;gap:5px;flex-wrap:wrap">
             <button class="btn btn-ghost btn-xs" onclick="editItem('${item.id}')">✏️</button>
-            <button class="btn btn-ghost btn-xs" onclick="toggleItemAvail('${item.id}')">${avail ? '❌' : '✅'}</button>
+            <button class="btn btn-ghost btn-xs" onclick="duplicateItem('${item.id}')" title="Duplicar">📋</button>
+            <button class="btn btn-ghost btn-xs" onclick="toggleItemAvail('${item.id}')" title="${avail ? 'Desativar' : 'Ativar'}">${avail ? '❌' : '✅'}</button>
             <button class="btn btn-ghost btn-xs" onclick="deleteItem('${item.id}')">🗑️</button>
           </div>
         </div>
@@ -1795,7 +1853,8 @@ function renderCardItems(catId) {
 
 function toggleLoja(v) {
   S.lojaAberta = v;
-  document.getElementById('loja-status-txt').textContent = v ? 'Aberta' : 'Fechada';
+  const _stEl = document.getElementById('loja-status-txt');
+  if(_stEl) _stEl.textContent = v ? 'Aberta' : 'Fechada';
   saveCardapio();
   toast(v ? '✅ Loja aberta! Clientes podem fazer pedidos.' : '🔴 Loja fechada.', v ? 'ok' : 'wa');
 }
@@ -1888,6 +1947,92 @@ function deleteItem(id) {
   saveCardapio(); rCard(); toast('Item removido.','wa');
 }
 
+// Duplicate item
+function duplicateItem(id) {
+  const item = S.cardItems.find(x=>x.id===id); if (!item) return;
+  const copy = {...item, id: uid(), nome: item.nome + ' (cópia)'};
+  S.cardItems.push(copy);
+  saveCardapio(); rCard();
+  toast('Item duplicado! Edite o nome se necessário.','ok');
+}
+
+// Edit category
+function editCat(id) {
+  const c = S.cardCategories.find(x=>x.id===id); if (!c) return;
+  document.getElementById('m-cat-t') && (document.getElementById('m-cat-t').textContent = 'Editar Categoria');
+  document.getElementById('mcat-n').value = c.nome;
+  document.getElementById('mcat-i').value = c.icone||'📂';
+  document.getElementById('mcat-o').value = c.ordem||99;
+  document.getElementById('mcat-id').value = c.id;
+  openM('m-cat');
+}
+
+// Save delivery config
+function saveDlv() {
+  S.delivery = S.delivery || {};
+  S.delivery.tel = document.getElementById('dlv-tel').value.replace(/\D/g,'');
+  S.delivery.pix = document.getElementById('dlv-pix').value.trim();
+  S.delivery.tempo = document.getElementById('dlv-tempo').value.trim() || '20-35 min';
+  S.delivery.taxa = parseFloat(document.getElementById('dlv-taxa').value)||0;
+  S.delivery.taxaGratis = document.getElementById('dlv-gratis').checked;
+  S.delivery.bairros = document.getElementById('dlv-bairros').value.trim();
+  S.delivery.obs = document.getElementById('dlv-obs').value.trim();
+  saveDelivery();
+  closeM('m-dlv');
+  rCard();
+  toast('Configurações de delivery salvas! ✅','ok');
+}
+
+// Open delivery config modal with current values
+function openDlv() {
+  const d = S.delivery || {};
+  const t = d.tel ? d.tel.replace(/^(\d{2})(\d{5})(\d{4})$/, '($1) $2-$3') : '';
+  document.getElementById('dlv-tel').value = t;
+  document.getElementById('dlv-pix').value = d.pix||'';
+  document.getElementById('dlv-tempo').value = d.tempo||'20-35 min';
+  document.getElementById('dlv-taxa').value = d.taxa||0;
+  document.getElementById('dlv-gratis').checked = d.taxaGratis !== false;
+  document.getElementById('dlv-bairros').value = d.bairros||'';
+  document.getElementById('dlv-obs').value = d.obs||'';
+  openM('m-dlv');
+}
+
+// Update delivery info bar in cardápio view
+function updateDlvBar() {
+  const d = S.delivery || {};
+  const el1 = document.getElementById('dlv-bar-tempo');
+  const el2 = document.getElementById('dlv-bar-taxa');
+  const el3 = document.getElementById('dlv-bar-tel');
+  if(el1) el1.textContent = d.tempo || 'Não configurado';
+  if(el2) el2.textContent = d.taxaGratis ? 'Entrega grátis' : (d.taxa > 0 ? 'R$ '+parseFloat(d.taxa).toFixed(2).replace('.',',') : 'Não configurado');
+  if(el3) el3.textContent = d.tel ? '('+d.tel.slice(0,2)+') '+d.tel.slice(2,7)+'-'+d.tel.slice(7) : '⚠️ Configure seu WhatsApp!';
+}
+
+// Generate order WhatsApp message to admin
+function notifyAdminWA(pedido) {
+  const d = S.delivery || {};
+  const adminTel = d.tel || (S.cfg && S.cfg.tel ? S.cfg.tel.replace(/\D/g,'') : '');
+  if (!adminTel) return; // no phone configured
+  const storeName = (S.cfg && S.cfg.nome) || 'Açaí Brazuca';
+  const itensMsg = pedido.itens.map(i => `  • ${i.emoji||'🍇'} ${i.nome} × ${i.qty} = R$ ${(i.qty*i.preco).toFixed(2).replace('.',',')}` ).join('\n');
+  const msg = `🍇 *NOVO PEDIDO #${pedido.num}*\n` +
+    `━━━━━━━━━━━━━━━\n` +
+    `👤 *Cliente:* ${pedido.cliente}\n` +
+    `📱 *Tel:* ${pedido.tel}\n` +
+    `📍 *Endereço:* ${pedido.end}${pedido.bairro ? ' - '+pedido.bairro : ''}\n` +
+    (pedido.ref ? `🏠 *Ref:* ${pedido.ref}\n` : '') +
+    `\n🛒 *ITENS:*\n${itensMsg}\n\n` +
+    `━━━━━━━━━━━━━━━\n` +
+    `💰 *TOTAL: R$ ${pedido.total.toFixed(2).replace('.',',')}*\n` +
+    `💳 *Pagamento:* ${pedido.pag}\n` +
+    (pedido.troco ? `💵 *Troco para:* ${pedido.troco}\n` : '') +
+    (pedido.obs ? `📝 *Obs:* ${pedido.obs}\n` : '') +
+    `━━━━━━━━━━━━━━━\n` +
+    `🕐 _Pedido via ${storeName}_`;
+  const phoneNum = adminTel.startsWith('55') ? adminTel : '55' + adminTel;
+  window.open(`https://wa.me/${phoneNum}?text=${encodeURIComponent(msg)}`, '_blank');
+}
+
 // openM item setup handled inside saveItem/editItem directly
 
 // ── PEDIDOS ADMIN ────────────────────────────────────────────────
@@ -1971,6 +2116,23 @@ function openDelivery() {
   updateCartUI();
   document.getElementById('da-logo').src = S.cfg.logo || LOGO;
   document.getElementById('da-name').textContent = S.cfg.nome || 'Açaí Brazuca';
+  // Show delivery meta info
+  const d = S.delivery || {};
+  const tempoText = d.tempo || '20-35 min';
+  const taxaText = (d.taxaGratis !== false) ? 'Entrega grátis' : (d.taxa > 0 ? 'Taxa R$ '+parseFloat(d.taxa).toFixed(2).replace('.',',') : 'Entrega grátis');
+  const metaEl = document.getElementById('da-store-meta');
+  if(metaEl) metaEl.textContent = `⭐ 4.9 · 🕐 ${tempoText} · 🛵 ${taxaText}`;
+  // Show obs/welcome message if set
+  if(d.obs) {
+    const bodyEl = document.getElementById('da-body');
+    if(bodyEl) {
+      const obsDiv = document.createElement('div');
+      obsDiv.id = 'da-obs-banner';
+      obsDiv.style.cssText = 'background:var(--lime-l);border-radius:10px;padding:10px 14px;margin:0 16px 12px;font-size:12px;color:var(--berry);font-weight:600';
+      obsDiv.textContent = '💬 ' + d.obs;
+      bodyEl.prepend(obsDiv);
+    }
+  }
   // open status
   const statusEl = document.getElementById('da-open-status');
   statusEl.className = 'da-status' + (S.lojaAberta ? '' : ' closed');
@@ -2116,9 +2278,23 @@ function changeQty(id, d) {
 // ── CHECKOUT ──────────────────────────────────────────────────────
 function openCheckout() {
   closeCart();
+  const d = S.delivery || {};
   const sub = cart.reduce((s,c)=>s+c.qty*c.preco,0);
-  document.getElementById('co-total').textContent = fmt(sub);
-  document.getElementById('co-summary').innerHTML = cart.map(c=>`<div style="display:flex;justify-content:space-between;margin-bottom:4px"><span>${c.emoji} ${esc(c.nome)} × ${c.qty}</span><span style="font-weight:700">${fmt(c.qty*c.preco)}</span></div>`).join('');
+  const taxa = d.taxaGratis !== false ? 0 : (parseFloat(d.taxa)||0);
+  const total = sub + taxa;
+  document.getElementById('co-total').textContent = fmt(total);
+  const d2 = S.delivery || {};
+  const taxa2 = d2.taxaGratis !== false ? 0 : (parseFloat(d2.taxa)||0);
+  document.getElementById('co-summary').innerHTML = cart.map(c=>`<div style="display:flex;justify-content:space-between;margin-bottom:4px"><span>${c.emoji} ${esc(c.nome)} × ${c.qty}</span><span style="font-weight:700">${fmt(c.qty*c.preco)}</span></div>`).join('') +
+    (taxa2 > 0 ? `<div style="display:flex;justify-content:space-between;margin-bottom:4px;color:var(--t3)"><span>Taxa de entrega</span><span>${fmt(taxa2)}</span></div>` : `<div style="color:var(--green);font-size:11px;margin-bottom:4px">✅ Entrega grátis</div>`);
+  if(d2.pix) {
+    const payOpts = document.getElementById('pay-opts');
+    if(payOpts) {
+      // Update pix option to show key
+      const pixOpt = payOpts.querySelector('.pay-opt');
+      if(pixOpt) pixOpt.title = 'Chave Pix: ' + d2.pix;
+    }
+  }
   document.getElementById('checkout-modal').classList.add('open');
 }
 function closeCheckout() {
@@ -2136,13 +2312,14 @@ function confirmarPedido() {
   const nome = document.getElementById('co-nome').value.trim();
   const tel  = document.getElementById('co-tel').value.trim();
   const end  = document.getElementById('co-end').value.trim();
+  const obsP = (document.getElementById('co-obs') || {}).value || '';
   if (!nome||!tel||!end) { toast('Preencha nome, telefone e endereço.','er'); return; }
   if (!cart.length) { toast('Seu carrinho está vazio.','er'); return; }
   const total = cart.reduce((s,c)=>s+c.qty*c.preco,0);
   const num = String((S.pedidos?.length||0)+1).padStart(5,'0');
   const pedido = {
     id: uid(), num, cliente:nome, tel, end:end+(document.getElementById('co-comp').value?' '+document.getElementById('co-comp').value:''),
-    bairro:document.getElementById('co-bairro').value, ref:document.getElementById('co-ref').value,
+    bairro:document.getElementById('co-bairro').value, ref:document.getElementById('co-ref').value, obs:obsP,
     itens:cart.map(c=>({...c})), total, pag:selectedPay,
     troco:document.getElementById('co-troco').value, status:'novo',
     criadoEm:new Date().toISOString()
@@ -2157,6 +2334,8 @@ function confirmarPedido() {
   const steps = [{ic:'✅',lbl:'Confirmado'},{ic:'👨‍🍳',lbl:'Preparando'},{ic:'🛵',lbl:'A caminho'},{ic:'🍇',lbl:'Entregue'}];
   document.getElementById('os-track').innerHTML = steps.map((s,i)=>`<div class="os-step ${i===0?'done':''}"><div class="os-step-dot">${s.ic}</div><div class="os-step-label">${s.lbl}</div></div>`).join('');
   document.getElementById('order-success').classList.add('show');
+  // WhatsApp notification to admin
+  notifyAdminWA(pedido);
   // Notification sound for admin
   try{const ac=new(window.AudioContext||window.webkitAudioContext)();const o=ac.createOscillator();const g=ac.createGain();o.connect(g);g.connect(ac.destination);o.frequency.setValueAtTime(880,ac.currentTime);o.frequency.setValueAtTime(660,ac.currentTime+.1);g.gain.setValueAtTime(.2,ac.currentTime);g.gain.exponentialRampToValueAtTime(.001,ac.currentTime+.4);o.start();o.stop(ac.currentTime+.4);}catch(e){}
   // notify admin
